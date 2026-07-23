@@ -13,12 +13,32 @@ import os
 from datetime import datetime, timezone
 
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 app = FastAPI(
     title="Demo FastAPI Backend",
     description="A minimal FastAPI application ready to deploy on Databricks Apps.",
     version="1.0.0",
+)
+
+# ---------------------------------------------------------------------------
+# CORS: allow the external React UI to call these endpoints from a browser.
+# Set ALLOWED_ORIGINS (comma-separated) in app.yaml / env for production.
+# Example: ALLOWED_ORIGINS="https://my-react-app.com,http://localhost:5173"
+# ---------------------------------------------------------------------------
+_allowed_origins = [
+    o.strip()
+    for o in os.getenv("ALLOWED_ORIGINS", "http://localhost:5173").split(",")
+    if o.strip()
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=_allowed_origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
