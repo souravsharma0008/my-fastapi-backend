@@ -5,3 +5,7 @@ command:
   - "0.0.0.0"
   - "--port"
   - "$DATABRICKS_APP_PORT"
+
+env:
+  - name: ALLOWED_ORIGINS
+    value: "https://frontendapplication-7474652854490729.aws.databricksapps.com"
